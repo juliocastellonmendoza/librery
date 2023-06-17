@@ -1,4 +1,4 @@
-package com.web.librery.domain.orden;
+package com.web.librery.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,20 +8,26 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Entity(name = "Orden")
-@Table(name = "orden")
+@Entity(name = "DetalleOrden")
+@Table(name = "detalleorden")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Orden {
+public class DetalleOrden {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String numero;
-    private Date fechaCreacion;
-    private Date fechaRecibida;
+    private String nombre;
+    private double cantidad;
+    private double precio;
     private double total;
+
+    @OneToOne
+    private Orden orden;
+
+    @ManyToOne
+    private Libros libros;
 
 }

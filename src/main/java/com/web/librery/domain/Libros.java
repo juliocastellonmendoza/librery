@@ -1,10 +1,11 @@
-package com.web.librery.domain.libro;
+package com.web.librery.domain;
+
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "Libros")
 @Table(name = "libros")
@@ -28,6 +29,10 @@ public class Libros {
     private int cantidad;
     private int isbn;
     private Boolean status;
+
+    @ManyToOne
+    private Usuario usuario;
+
 
 
 }

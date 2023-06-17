@@ -1,7 +1,10 @@
-package com.web.librery.domain.usuario;
+package com.web.librery.domain;
+
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity(name = "Usuario")
 @Table(name = "usuario")
@@ -22,4 +25,10 @@ public class Usuario {
     private String tipo;
     private String password;
     private Boolean status;
+
+    @OneToMany(mappedBy = "usuario")
+    private List<Libros> libros;
+
+    @OneToMany(mappedBy = "usuario")
+    private List<Orden> ordenes;
 }
