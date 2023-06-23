@@ -1,24 +1,18 @@
 package com.web.librery.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.Date;
-
-@Entity(name = "DetalleOrden")
-@Table(name = "detalleorden")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
+@Table(name = "detalles")
+@Getter
+@Setter
 @EqualsAndHashCode
 public class DetalleOrden {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id_detalle;
     private String nombre;
     private double cantidad;
     private double precio;
@@ -28,6 +22,16 @@ public class DetalleOrden {
     private Orden orden;
 
     @ManyToOne
-    private Libros libros;
+    private Libro libro;
 
+    public DetalleOrden() {
+    }
+
+    public DetalleOrden(Long id_detalle, String nombre, double cantidad, double precio, double total) {
+        this.id_detalle = id_detalle;
+        this.nombre = nombre;
+        this.cantidad = cantidad;
+        this.precio = precio;
+        this.total = total;
+    }
 }

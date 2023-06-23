@@ -36,7 +36,7 @@
     <li class="breadcrumb-item active">Ver Libros</li>
   </ol>
 
-  <a class="btn btn-primary" href="#" > Crear Libro</a>
+  <a class="btn btn-primary" th:href="@{/libros/create}" > Crear Libro</a>
   <h2>Libros</h2>
   <table class="table">
     <thead>
@@ -50,11 +50,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td ></td>
-        <td ></td>
-        <td ></td>
-        <td ></td>
+      <tr th:each="libro:${libros}">
+        <td th:text="${libro.titulo}"></td>
+        <td th:text="${libro.genero}"></td>
+        <td th:text="${libro.cantidad}"></td>
+        <td th:text="${libro.precio}"></td>
         <td><a  class="btn btn-warning" href="">Editar</a> </td>
         <td><a  class="btn btn-danger" href="">Eliminar</a> </td>
       </tr>       
