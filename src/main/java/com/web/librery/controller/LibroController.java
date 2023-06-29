@@ -6,9 +6,9 @@ import com.web.librery.service.LibroService;
 import org.slf4j.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/libros")
@@ -44,4 +44,28 @@ public class LibroController {
         return "redirect:/libros";
     }
 
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable Long id, Model model){
+
+        Libro libro = new Libro();
+        Optional<Libro> optionalLibro=libroService.get(id);
+        libro=optionalLibro.get();
+
+        LOGGER.info("Libro buscado: {}",libro);
+        model.addAttribute("libro",libro);
+
+        return "libros/edit";
+    }
+
+    @PostMapping ("/update")
+    public String update(Libro libro){
+        libroService.update(libro);
+        return "redirect:/libros";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id){
+        libroService.delete(id);
+        return "redirect:/libros";
+    }
 }

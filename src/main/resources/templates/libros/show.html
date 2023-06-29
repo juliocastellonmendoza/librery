@@ -41,7 +41,7 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">titulo</th>
+        <th scope="col">Título</th>
         <th scope="col">Genero</th>
         <th scope="col">Inventario</th>
         <th scope="col">Precio</th>
@@ -55,8 +55,8 @@
         <td th:text="${libro.genero}"></td>
         <td th:text="${libro.cantidad}"></td>
         <td th:text="${libro.precio}"></td>
-        <td><a  class="btn btn-warning" href="">Editar</a> </td>
-        <td><a  class="btn btn-danger" href="">Eliminar</a> </td>
+        <td><a  class="btn btn-warning" th:href="@{libros/edit/{id} (id=${libro.id_libro}) }">Editar</a> </td>
+        <td><a  class="btn btn-danger" th:href="@{libros/delete/{id} (id=${libro.id_libro}) }">Eliminar</a> </td>
       </tr>       
     </tbody>
   </table>

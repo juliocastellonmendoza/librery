@@ -98,8 +98,6 @@ public class Usuario {
                 ", telefono='" + telefono + '\'' +
                 ", tipo='" + tipo + '\'' +
                 ", password='" + password + '\'' +
-                ", libros=" + libros +
-                ", ordenes=" + ordenes +
                 '}';
     }
 }
