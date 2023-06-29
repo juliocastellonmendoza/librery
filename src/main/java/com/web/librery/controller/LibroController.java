@@ -73,15 +73,14 @@ public class LibroController {
 
     @PostMapping ("/update")
     public String update(Libro libro,@RequestParam(name = "img") MultipartFile file) throws IOException {
+        Libro l = new Libro();
+        l=libroService.get(libro.getId_libro()).get();
+
         if(file.isEmpty()){ //Cuando editamos el libro , pero no cambiamos la imagen
-            Libro l = new Libro();
-            l=libroService.get(libro.getId_libro()).get();
+
             libro.setRuta(l.getRuta());
         }else{//Cuando se edtia tambien la imagen
-
-            Libro l = new Libro();
-            l=libroService.get(libro.getId_libro()).get();
-
+            //eliminar cuando no sea la imagen por default
             if(!l.getRuta().equals("default.jpg")){
                 upload.deleteImages(l.getRuta());
             }
@@ -89,6 +88,7 @@ public class LibroController {
             String nombreImagen = upload.saveImages(file);
             libro.setRuta(nombreImagen);
         }
+        libro.setUsuario(l.getUsuario());
         libroService.update(libro);
         return "redirect:/libros";
     }
