@@ -3,9 +3,12 @@ package com.web.librery.controller;
 import com.web.librery.domain.DetalleOrden;
 import com.web.librery.domain.Libro;
 import com.web.librery.domain.Orden;
+import com.web.librery.domain.Usuario;
 import com.web.librery.service.LibroService;
+import com.web.librery.service.UsuarioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +25,9 @@ public class HomeController {
 
     private LibroService libroService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     //Para almacenar los detalles de la orden
     private List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
 
@@ -29,7 +35,9 @@ public class HomeController {
     Orden orden = new Orden();
 
     public HomeController(LibroService libroService){
+
         this.libroService=libroService;
+
     }
 
     @GetMapping("")
@@ -64,8 +72,13 @@ public class HomeController {
         detalleOrden.setNombre(libro.getTitulo());
         detalleOrden.setTotal(libro.getPrecio()*cantidad);
         detalleOrden.setLibro(libro);
+        //Se valida que el libro no se agrege dos veces
+        Long idLibro = libro.getId_libro();
+        boolean ingresado=detalles.stream().anyMatch(l -> l.getLibro().getId_libro()==idLibro);
 
-        detalles.add(detalleOrden);
+        if(!ingresado){
+            detalles.add(detalleOrden);
+        }
 
         sumaTotal=detalles.stream().mapToDouble(dt->dt.getTotal()).sum();
 
@@ -74,5 +87,44 @@ public class HomeController {
         model.addAttribute("orden",orden);
 
         return "usuario/carrito";
+    }
+
+    //Quitar un libro del carrito
+
+    @GetMapping("/delete/cart/{id}")
+    public String deleteLibroCart(@PathVariable Long id, Model model){
+        //lista nueva de libros
+        List<DetalleOrden> ordenesNueva = new ArrayList<DetalleOrden>();
+        for(DetalleOrden detalleOrden:detalles){
+            if(detalleOrden.getLibro().getId_libro()!=id){
+                ordenesNueva.add(detalleOrden);
+            }
+        }
+        //poner la nueva lista con los libros restantes
+        detalles = ordenesNueva;
+        double sumaTotal=0;
+        sumaTotal=detalles.stream().mapToDouble(dt->dt.getTotal()).sum();
+
+        orden.setTotal(sumaTotal);
+        model.addAttribute("cart",detalles);
+        model.addAttribute("orden",orden);
+
+        return "usuario/carrito";
+    }
+
+    @GetMapping("/getCart")
+    public String getCart(Model model){
+        model.addAttribute("cart",detalles);
+        model.addAttribute("orden",orden);
+        return "usuario/carrito";
+    }
+
+    @GetMapping("/order")
+    public String order(Model model){
+        Usuario usuario = usuarioService.findById(1L).get();
+        model.addAttribute("cart",detalles);
+        model.addAttribute("orden",orden);
+        model.addAttribute("usuario", usuario);
+        return "usuario/resumenorden";
     }
 }
