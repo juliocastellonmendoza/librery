@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
@@ -44,9 +45,7 @@ public class HomeController {
     Orden orden = new Orden();
 
     public HomeController(LibroService libroService){
-
         this.libroService=libroService;
-
     }
 
     @GetMapping("")
@@ -136,6 +135,7 @@ public class HomeController {
         model.addAttribute("usuario", usuario);
         return "usuario/resumenorden";
     }
+
     //Guardar la Orden
     @GetMapping("/saveOrder")
     public String saveOrder(){
@@ -160,5 +160,15 @@ public class HomeController {
 
         return "redirect:/";
     }
+
+    @PostMapping("/search")
+    public String searchLibro(@RequestParam String nombre, Model model){
+        LOGGER.info("Nombre del libro: {}", nombre);
+        List<Libro> libros = libroService.findAll().stream().filter(p -> p.getTitulo().contains(nombre)).collect(Collectors.toList());
+        model.addAttribute("libros",libros);
+        return "usuario/home";
+    }
+
+
 
 }
