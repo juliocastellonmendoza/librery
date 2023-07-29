@@ -8,4 +8,5 @@ public interface UsuarioService {
     Optional<Usuario> findById(Long id);
 
     Usuario save(Usuario usuario);
+    Optional<Usuario> fndUsuarioByEmail(String email);
 }
